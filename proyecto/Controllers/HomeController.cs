@@ -15,7 +15,6 @@ namespace proyecto.Controllers
         private readonly ILogger<HomeController> _logger;
 
         usersContext db = new usersContext();
-        Usuarios lastUser;
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -268,47 +267,36 @@ namespace proyecto.Controllers
         public async Task<IActionResult> Clientes(int id, string nombre, string rtn, string direccion, string telefono, string correo, bool agregar)
         {
 
-
             if (agregar)
             {
                 db.Clientes.Add(new Clientes() { Id = id, Nombre = nombre, Rtn = rtn, Direccion = direccion, Telefono = telefono, Correo = correo });
                 db.SaveChanges();
-            } else
-            {
+            } else {
                 var clientes = db.Clientes;
-                List<Clientes> encontrados = clientes.Where(c => c.Id == id).ToList();
+                List<Clientes> encontrados = clientes.ToList();
+
+                Clientes clienteActualizado = encontrados.Where(e=> e.Id = id)
                 
+
                 //logger.LogInformation("ENCONTRADOS: " + encontrados.Count);
                 return Content("ENCONTRADOS: " + encontrados.Count);
-                Clientes clienteActualizado = encontrados[0];
+
+
+                /*Clientes clienteActualizado = encontrados;
                 clienteActualizado.Nombre = nombre;
                 clienteActualizado.Rtn = rtn;
                 clienteActualizado.Direccion = direccion;
                 clienteActualizado.Telefono = telefono;
                 clienteActualizado.Correo = correo;
                 db.Update<Clientes>(clienteActualizado);
-                db.SaveChanges();
+                db.SaveChanges();*/
             }
 
             List<Clientes> cs = db.Clientes.ToList();
             ViewBag.clientes = cs;
             return View();
         }
-
-        /*
-         [HttpGet]
-        public IActionResult Dashboard(string usuario)
-        {
-            return Content($"dashboard GET: {usuario}");
-        }*/
-
-        /*[HttpPost]
-        public IActionResult Dashboard()
-        {
-            return View();
-            //return View();
-        }*/
-
+        
         public IActionResult Privacy()
         {
             return View();
