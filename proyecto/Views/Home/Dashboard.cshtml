@@ -1,0 +1,33 @@
+﻿@model proyecto.Models.Usuarios
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div>
+    <h1 class="display-4 text-center">Hola @Html.Raw(ViewBag.usuario)</h1>
+    <h2 class="text-center">Haga click en el menu de arriba para ver algo.</h2>
+    </div>
+
+
+@section itemsDelMenu {
+    <form>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Cerrar Sesion</a>
+    </li>
+        </form>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="NuevaOrden">Nueva Orden</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="VerOrdenes">Ver Ordenes</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Clientes">Clientes</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Estadisticas">Estadisticas</a>
+    </li>
+
+}
+
+@*  END ----  LOGIN PAGE   *@
