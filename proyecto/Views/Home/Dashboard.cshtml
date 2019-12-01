@@ -10,11 +10,18 @@
 
 
 @section itemsDelMenu {
-    <form>
+    
+    <div style="position:absolute; right:0;">
+        <li class="nav-item">
+            <form asp-controller="Home" asp-action="Logout" method="post">
+                <span>@Html.Raw(ViewBag.usuario)</span>
+                <button class="btn btn-danger">Cerrar Sesion</button>
+            </form>
+        </li>
+    </div>
     <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Cerrar Sesion</a>
+        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Dashboard">Dashboard</a>
     </li>
-        </form>
     <li class="nav-item">
         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="NuevaOrden">Nueva Orden</a>
     </li>

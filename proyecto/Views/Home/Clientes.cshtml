@@ -1,0 +1,104 @@
+﻿@{
+    ViewData["Title"] = "Clientes";
+}
+
+
+@{
+
+    @if (ViewBag.mensaje != null)
+    {
+
+        bool error = ViewBag.error;
+
+        <div style="width:100%; height: 75px; @Html.Raw(error ? "background-color: crimson;" : "background-color: green;") color:white;">
+
+            <p>@Html.Raw(error ? "Error: " + ViewBag.mensaje : ViewBag.mensaje)</p>
+
+            @*f (error)
+            {
+                <p>Recomendacion: <a asp-controller='Home' asp-action='Clientes'>decirle al admin que no esta funcionando</a></p>
+            }*@
+
+        </div>
+    }
+}
+
+
+
+@if (ViewBag.clientes == null)
+{
+    Html.Raw("<p class='text-center'>No hay clientes para mostrar, <a asp-area='' asp-controller='Home' asp-action='NuevaOrden'>ingrese una</a></p>");
+}
+else
+{
+    <div class="container">
+
+        <h1 class="text-center">Listado de clientes</h1>
+
+        <table class="table table-bordered">
+            <thead>
+            <th>id</th>
+            <th>nombre</th>
+            <th>rtn</th>
+            <th>direccion</th>
+            <th>telefono</th>
+            <th>correo</th>
+            <th>acciones</th>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var cliente in ViewBag.clientes)
+                    {
+                        <tr>
+                            <form asp-controller="Home" asp-action="Clientes" method="post">
+                                <td><input type="text" value="@Html.Raw(cliente.Id)" placeholder="Id" name="id" disabled required /></td>
+                                <td><input type="text" value="@Html.Raw(cliente.Nombre)" placeholder="Nombre" name="nombre" required /></td>
+                                <td><input type="text" value="@Html.Raw(cliente.Rtn)" placeholder="Rtn" name="rtn" required /></td>
+                                <td><input type="text" value="@Html.Raw(cliente.Direccion)" placeholder="Direccion" name="direccion" required /></td>
+                                <td><input type="text" value="@Html.Raw(cliente.Telefono)" placeholder="Telefono" name="telefono" required /></td>
+                                <td><input type="text" value="@Html.Raw(cliente.Correo)" placeholder="Correo" name="correo" required /></td>
+                                <input type="hidden" name="agregar" value="false" />
+                                <td><button type="submit" class="btn btn-success">actualizar</button></td>
+                            </form>
+                        </tr>
+                    }
+                }
+                <tr><td colspan="7"><strong>AGREGAR UN CLIENTE NUEVO:</strong></td></tr>
+                <tr>
+                    <form asp-controller="Home" asp-action="Clientes" method="post">
+                        <td><input type="text" placeholder="@Html.Raw(ViewBag.clientes.Count + 1)" name="id" disabled /></td>
+                        <td><input type="text" placeholder="Nombre" name="nombre" required /></td>
+                        <td><input type="text" placeholder="Rtn" name="rtn" required /></td>
+                        <td><input type="text" placeholder="Direccion" name="direccion" required /></td>
+                        <td><input type="text" placeholder="Telefono" name="telefono" required /></td>
+                        <td><input type="email" placeholder="Correo" name="correo" required /></td>
+                        <input type="hidden" name="agregar" value="true" />
+                        <td><button type="submit" class="btn btn-success">AGREGAR</button></td>
+                    </form>
+                </tr>
+            <tbody>
+        </table>
+
+
+    </div>
+}
+
+@section itemsDelMenu {
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Dashboard">Volver al Dashboard</a>
+    </li>
+}
+@section Scripts{
+
+    <script type="text/javascript">
+
+        /*
+        var select = document.getElementById('elSelect');
+        var selectValue = select.options[select.selectedIndex].value;
+
+        var hidden = document.getElementsByClassName()[0]
+        */
+    </script>
+
+
+}

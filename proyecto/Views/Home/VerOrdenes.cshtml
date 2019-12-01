@@ -1,0 +1,115 @@
+﻿@{
+    ViewData["Title"] = "Ver Ordenes";
+}
+
+
+@{
+
+    @if (ViewBag.mensaje != null)
+    {
+
+        bool error = ViewBag.error;
+
+        <div style="width:100%; height: 75px; @Html.Raw(error ? "background-color: crimson;" : "background-color: green;") color:white;">
+
+            <p>@Html.Raw(error ? "Error: " + ViewBag.mensaje : ViewBag.mensaje)</p>
+
+            @if (error)
+            {
+                <p>Recomendacion: <a asp-controller='Home' asp-action='Clientes'>decirle al admin que no esta funcionando</a></p>
+            }
+
+        </div>
+    }
+}
+
+
+
+@if (ViewBag.ordenes == null)
+{
+    Html.Raw("<p class='text-center'>No hay ordenes para mostrar, <a asp-area='' asp-controller='Home' asp-action='NuevaOrden'>ingrese una</a></p>");
+}
+else
+{
+<div class="container">
+
+    <h1 class="text-center">Listado de ORDENES DE TRABAJO</h1>
+
+    <table class="table table-bordered">
+        <thead>
+        <th>id</th>
+        <th>cliente</th>
+        <th>titulo</th>
+        <th>fechaEntrega</th>
+        <th>descripccion</th>
+        <th>ESTADO</th>
+        <th>acciones</th>
+        </thead>
+        <tbody>
+            @{
+
+                foreach (var orden in ViewBag.ordenes)
+                {
+                    <tr>
+                        <form asp-controller="Home" asp-action="VerOrdenes" method="post">
+                            <td>@Html.Raw(orden.Id)</td>
+                            <td>@Html.Raw(orden.Cliente)</td>
+                            <td>@Html.Raw(orden.Titulo)</td>
+                            <td>@Html.Raw(orden.FechaEntrega)</td>
+                            <td>@Html.Raw(orden.Descripccion)</td>
+                            <td>
+                                <select name="estado">
+                                    @{
+
+                                        string estadoActual = orden.Estado;
+                                        string[] estados = { "En Proceso", "Terminada", "Pausada" };
+                                        foreach (string estado in estados)
+                                        {
+                                            if (estado == estadoActual)
+                                            {
+                                                <option value="@Html.Raw(estado)" selected="selected">@Html.Raw(estado)</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@Html.Raw(estado)">@Html.Raw(estado)</option>
+                                            }
+                                        }
+
+                                    }
+                                </select>
+
+                            </td>
+                            <td>
+                                <input type="hidden" name="id" value="@Html.Raw(orden.Id)" />
+                                <button type="submit" class="btn btn-success">actualizar</button>
+                            </td>
+                        </form>
+                    </tr>
+                }
+            }
+        <tbody>
+    </table>
+
+
+</div>
+}
+
+@section itemsDelMenu {
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Dashboard">Volver al Dashboard</a>
+    </li>
+}
+@section Scripts{
+
+    <script type="text/javascript">
+
+        /*
+        var select = document.getElementById('elSelect');
+        var selectValue = select.options[select.selectedIndex].value;
+
+        var hidden = document.getElementsByClassName()[0]
+        */
+    </script>
+
+
+}
