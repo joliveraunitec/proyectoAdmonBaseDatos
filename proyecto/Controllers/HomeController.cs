@@ -274,13 +274,11 @@ namespace proyecto.Controllers
             } else {
                 var clientes = db.Clientes;
                 List<Clientes> encontrados = clientes.ToList();
-
-                Clientes clienteActualizado = encontrados.Where(e=> e.Id = id)
-                
+                // return Content("ENCONTRADOS: " + encontrados.Count);
+                Clientes clienteActualizado = encontrados.Where(c => c.Id == id).First();
+                return Content("clienteActualizado: " + clienteActualizado.Nombre);
 
                 //logger.LogInformation("ENCONTRADOS: " + encontrados.Count);
-                return Content("ENCONTRADOS: " + encontrados.Count);
-
 
                 /*Clientes clienteActualizado = encontrados;
                 clienteActualizado.Nombre = nombre;
