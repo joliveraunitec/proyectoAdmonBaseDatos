@@ -158,16 +158,13 @@ namespace proyecto.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> NuevaOrden(int cliente, string titulo, string fechaEntrega, string descripccion)
+        public async Task<IActionResult> NuevaOrden(string cliente, string titulo, string fechaEntrega, string descripccion)
         {
 
-
-            var ordenes = db.Ordenes;
-
             var clientes = db.Clientes;
-            Clientes clienteEncontrado = null;
+            Clientes clienteEncontrado;
 
-            List<Clientes> clientesEncontrados = clientes.Where(c => c.Id == cliente).ToList();
+            List<Clientes> clientesEncontrados = clientes.Where(c => c.Nombre == cliente).ToList();
             if (clientesEncontrados.Count < 1)
             {
                 ViewBag.mensaje = "ese cliente no existe";
@@ -178,23 +175,25 @@ namespace proyecto.Controllers
                 clienteEncontrado = clientesEncontrados[0];
             }
 
+
+            var ordenes = db.Ordenes;
             //chequear si ya existe
             List<Ordenes> encontrados = ordenes.Where(o => o.Cliente == clienteEncontrado.Id && o.Titulo == titulo).ToList();
 
             if (encontrados.Count > 0)
             {
                 ViewBag.mensaje = "orden de trabajo ya existe, posible titulo duplicado";
-                ViewBag.registered = true;
+                ViewBag.error = true;
                 return View();
             }
             else
             {
-                ViewBag.registered = false;
+                ViewBag.error = false;
                 ViewBag.mensaje = "orden de trabajo creada con exito.";
                 ordenes.Add(new Ordenes()
                 {
 
-                    Cliente = cliente,
+                    Cliente = clienteEncontrado.Id,
                     Titulo = titulo,
                     FechaEntrega = DateTime.Parse(fechaEntrega),
                     Descripccion = descripccion,
@@ -205,8 +204,7 @@ namespace proyecto.Controllers
             }
 
 
-            List<Clientes> cs = db.Clientes.ToList();
-            ViewBag.clientes = cs;
+            ViewBag.clientes = clientes.ToList();
 
             return View();
         }
@@ -280,7 +278,7 @@ namespace proyecto.Controllers
             if (agregar)
             {
 
-                db.Clientes.Add(new Clientes() { Id = id, Nombre = nombre, Rtn = rtn, Direccion = direccion, Telefono = telefono, Correo = correo });
+                db.Clientes.Add(new Clientes() { Nombre = nombre, Rtn = rtn, Direccion = direccion, Telefono = telefono, Correo = correo });
                 db.SaveChanges();
 
                 ViewBag.mensaje = "usuario CREADO con exito.";
