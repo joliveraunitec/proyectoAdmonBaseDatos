@@ -51,7 +51,8 @@ else
                     {
                         <tr>
                             <form asp-controller="Home" asp-action="Clientes" method="post">
-                                <td><input type="text" value="@Html.Raw(cliente.Id)" placeholder="Id" name="id" disabled required /></td>
+                                <input type="hidden" value="@Html.Raw(cliente.Id)" name="id" />
+                                <td><input type="text" value="@Html.Raw(cliente.Id)" disabled/></td>
                                 <td><input type="text" value="@Html.Raw(cliente.Nombre)" placeholder="Nombre" name="nombre" required /></td>
                                 <td><input type="text" value="@Html.Raw(cliente.Rtn)" placeholder="Rtn" name="rtn" required /></td>
                                 <td><input type="text" value="@Html.Raw(cliente.Direccion)" placeholder="Direccion" name="direccion" required /></td>
@@ -66,7 +67,8 @@ else
                 <tr><td colspan="7"><strong>AGREGAR UN CLIENTE NUEVO:</strong></td></tr>
                 <tr>
                     <form asp-controller="Home" asp-action="Clientes" method="post">
-                        <td><input type="text" placeholder="@Html.Raw(ViewBag.clientes.Count + 1)" name="id" disabled /></td>
+                        <input type="hidden" value="-1" name="id" />
+                        <td><input type="text" placeholder="@Html.Raw(ViewBag.clientes.Count + 1)" name="id" /></td>
                         <td><input type="text" placeholder="Nombre" name="nombre" required /></td>
                         <td><input type="text" placeholder="Rtn" name="rtn" required /></td>
                         <td><input type="text" placeholder="Direccion" name="direccion" required /></td>

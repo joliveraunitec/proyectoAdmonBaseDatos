@@ -123,7 +123,16 @@
 
                 <div class="input-group form-group">
                     <label>Nombre Cliente:</label>
-                    <input type="text" class="form-control" name="cliente" placeholder="Nombre cliente" required>
+                    <!--input type="text" class="form-control" name="cliente" placeholder="Nombre cliente" required-->
+                    <select name="cliente">
+                        @{
+                            foreach (Clientes c in ViewBag.clientes)
+                            {
+                                <option value="@Html.Raw(c.Nombre)">@Html.Raw(c.Nombre)</option>
+                            }
+                        }
+
+                    </select>
                 </div>
 
                 <div class="input-group form-group">

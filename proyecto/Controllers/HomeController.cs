@@ -151,6 +151,9 @@ namespace proyecto.Controllers
                 return RedirectToAction("Index");
             }
 
+            List<Clientes> clientes = db.Clientes.ToList();
+            ViewBag.clientes = clientes;
+
             return View();
         }
 
@@ -200,6 +203,10 @@ namespace proyecto.Controllers
                 });
                 await db.SaveChangesAsync();
             }
+
+
+            List<Clientes> cs = db.Clientes.ToList();
+            ViewBag.clientes = cs;
 
             return View();
         }
@@ -267,16 +274,51 @@ namespace proyecto.Controllers
         public async Task<IActionResult> Clientes(int id, string nombre, string rtn, string direccion, string telefono, string correo, bool agregar)
         {
 
+
+            //return Content($"id: {id}, nombre: {nombre}, rtn: {rtn}, direccion: {direccion}, telefono: {telefono}, correo: {correo}, agregar: {agregar}");
+
             if (agregar)
             {
+
                 db.Clientes.Add(new Clientes() { Id = id, Nombre = nombre, Rtn = rtn, Direccion = direccion, Telefono = telefono, Correo = correo });
                 db.SaveChanges();
+
+                ViewBag.mensaje = "usuario CREADO con exito.";
+                ViewBag.error = false;
             } else {
                 var clientes = db.Clientes;
-                List<Clientes> encontrados = clientes.ToList();
+                List<Clientes> encontrados = clientes.Where(e => e.Id == id).ToList();
+                /*foreach(Clientes clienteActualizado in encontrados)
+                {
+                    if (clienteActualizado.Id == id)
+                    {
+                        clienteActualizado.Nombre = nombre;
+                        clienteActualizado.Rtn = rtn;
+                        clienteActualizado.Direccion = direccion;
+                        clienteActualizado.Telefono = telefono;
+                        clienteActualizado.Correo = correo;
+                        db.Update<Clientes>(clienteActualizado);
+                        db.SaveChanges();
+                        break;
+                    }
+                }*/
+
+                Clientes clienteActualizado = encontrados[0];
+                clienteActualizado.Nombre = nombre;
+                clienteActualizado.Rtn = rtn;
+                clienteActualizado.Direccion = direccion;
+                clienteActualizado.Telefono = telefono;
+                clienteActualizado.Correo = correo;
+                db.Update<Clientes>(clienteActualizado);
+                db.SaveChanges();
+
+                ViewBag.mensaje = "usuario ACTUALIADO con exito.";
+                ViewBag.error = false;
+
                 // return Content("ENCONTRADOS: " + encontrados.Count);
-                Clientes clienteActualizado = encontrados.Where(c => c.Id == id).First();
-                return Content("clienteActualizado: " + clienteActualizado.Nombre);
+
+                /*Clientes clienteActualizado = encontrados.Where(c => c.Id == id).First();
+                return Content("clienteActualizado: " + clienteActualizado.Nombre);*/
 
                 //logger.LogInformation("ENCONTRADOS: " + encontrados.Count);
 
