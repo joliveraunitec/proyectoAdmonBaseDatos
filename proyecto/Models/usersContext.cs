@@ -75,6 +75,11 @@ namespace proyecto.Models
 
                 entity.Property(e => e.Cliente).HasColumnName("cliente");
 
+                entity.Property(e => e.Creado)
+                    .HasColumnName("creado")
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
                 entity.Property(e => e.Descripccion)
                     .IsRequired()
                     .HasColumnName("descripccion")
@@ -101,7 +106,7 @@ namespace proyecto.Models
                     .WithMany(p => p.Ordenes)
                     .HasForeignKey(d => d.Cliente)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__ordenes__cliente__4E88ABD4");
+                    .HasConstraintName("FK__ordenes__cliente__571DF1D5");
             });
 
             modelBuilder.Entity<Usuarios>(entity =>

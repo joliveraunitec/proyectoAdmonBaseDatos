@@ -11,6 +11,7 @@ namespace proyecto.Models
         public DateTime FechaEntrega { get; set; }
         public string Descripccion { get; set; }
         public string Estado { get; set; }
+        public DateTime Creado { get; set; }
 
         public virtual Clientes ClienteNavigation { get; set; }
     }

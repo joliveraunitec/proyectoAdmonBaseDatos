@@ -122,24 +122,21 @@
 
                 <div class="input-group form-group">
                     <label>Nombre Cliente:</label>
-                    <!--input type="text" class="form-control" name="cliente" placeholder="Nombre cliente" required-->
-
-                        @{
-                            if (ViewBag.clientes.Count > 0)
+                    @{
+                        if (ViewBag.clientes.Count > 0)
+                        {
+                        <select name="cliente">
+                            @foreach (Clientes c in ViewBag.clientes)
                             {
-                                <select name="cliente">
-                                    @foreach (Clientes c in ViewBag.clientes)
-                                    {
-                                    <option value="@Html.Raw(c.Nombre)">@Html.Raw(c.Nombre)</option>
-                                    }
-                                </select>
-                            } else
-                            {
-                                <input class="form-control" type="text" name="cliente" placeholder="Ingrese el nombre del cliente" required />
+                                <option value="@Html.Raw(c.Nombre)">@Html.Raw(c.Nombre)</option>
                             }
+                        </select>
+                        } else
+                        {
+                            <input class="form-control" type="text" name="cliente" placeholder="Ingrese el nombre del cliente" required />
                         }
-
-                        </div>
+                    }
+                </div>
 
                 <div class="input-group form-group">
                     <label>Titulo del trabajo:</label>

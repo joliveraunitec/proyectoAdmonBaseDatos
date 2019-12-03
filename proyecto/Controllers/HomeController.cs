@@ -162,9 +162,9 @@ namespace proyecto.Controllers
         {
 
             var clientes = db.Clientes;
-            Clientes clienteEncontrado;
-
+            
             List<Clientes> clientesEncontrados = clientes.Where(c => c.Nombre == cliente).ToList();
+            Clientes clienteEncontrado;
             if (clientesEncontrados.Count < 1)
             {
                 ViewBag.mensaje = "ese cliente no existe";
@@ -174,7 +174,6 @@ namespace proyecto.Controllers
             {
                 clienteEncontrado = clientesEncontrados[0];
             }
-
 
             var ordenes = db.Ordenes;
             //chequear si ya existe
@@ -334,7 +333,97 @@ namespace proyecto.Controllers
             ViewBag.clientes = cs;
             return View();
         }
-        
+
+
+        public async Task<IActionResult> Estadisticas()
+        {
+
+            List<Ordenes> ordenes = db.Ordenes.ToList();
+            List<String> estados = ordenes.Select(o => o.Estado).ToList();
+            int EnProceso = 0, Terminada = 0, Pausada = 0;
+
+
+            /*string full = "";
+
+            foreach(string s in estados)
+            {
+                full += s;
+            }
+
+            return Content(full);*/
+
+            foreach(string s in estados)
+            {
+                switch(s)
+                {
+                    case "En Proceso":
+                        EnProceso++;
+                        break;
+                    case "Terminada":
+                        Terminada++;
+                        break;
+                    case "Pausada":
+                        Pausada++;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            ViewBag.EnProceso = EnProceso;
+            ViewBag.Terminada = Terminada;
+            ViewBag.Pausada = Pausada;
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Estadisticas(DateTime fecha1, DateTime fecha2)
+        {
+
+            //return Content($"fecha1: {fecha1.ToLongDateString()}, fecha2: {fecha2.ToLongDateString()}");
+
+            List<Ordenes> ordenes = db.Ordenes.ToList();
+            List<Ordenes> estadosYFecha = ordenes.Where(q=> q.Creado > fecha1 && q.Creado < fecha2).Select(o => new Ordenes{ Estado = o.Estado, Creado = o.Creado}).ToList();
+            int EnProceso = 0, Terminada = 0, Pausada = 0;
+
+
+            /*string full = "";
+
+            foreach(string s in estados)
+            {
+                full += s;
+            }
+
+            return Content(full);*/
+
+            foreach (Ordenes s in estadosYFecha)
+            {
+                switch (s.Estado)
+                {
+                    case "En Proceso":
+                        EnProceso++;
+                        break;
+                    case "Terminada":
+                        Terminada++;
+                        break;
+                    case "Pausada":
+                        Pausada++;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            ViewBag.EnProceso = EnProceso;
+            ViewBag.Terminada = Terminada;
+            ViewBag.Pausada = Pausada;
+
+            ViewBag.inicio = fecha1.Date.ToShortDateString();
+            ViewBag.hasta = fecha2.Date.ToShortDateString();
+
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();

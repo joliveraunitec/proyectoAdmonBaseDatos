@@ -1,0 +1,105 @@
+﻿@{
+    ViewData["Title"] = "Estadisticas";
+}
+
+@{
+
+    @if (ViewBag.mensaje != null)
+    {
+
+        bool error = ViewBag.error;
+
+        <div style="width:100%; height: 75px; @Html.Raw(error ? "background-color: crimson;" : "background-color: green;") color:white;">
+
+            <p>@Html.Raw(error ? "Error: " + ViewBag.mensaje : ViewBag.mensaje)</p>
+
+            @if (error)
+            {
+                <p>Recomendacion: <a asp-controller='Home' asp-action='Clientes'>agregar cliente</a></p>
+            }
+        </div>
+    }
+}
+
+
+<div class="container">
+    <h1>Estadisticas</h1>
+    <div class="row">
+        <div class="col">
+            <form asp-controller="Home" asp-action="Estadisticas" method="post">
+                <p>filtrar por fecha:</p>
+                <div class="input-group">
+                    <p>fecha inicio:</p>
+                    <input type="datetime-local" name="fecha1" required>
+                </div>
+                <div class="input-group">
+                    <p>fecha hasta:</p>
+                    <input type="datetime-local" name="fecha2" required>
+                </div>
+                <button type="submit">Aplicar filtros</button>
+            </form>
+            <h1>Ordenes de trabajo por fecha</h1>
+            @{
+
+                if (ViewBag.inicio != null)
+                {
+                    <p>Desde: @Html.Raw(ViewBag.inicio)</p>
+                }
+                if (ViewBag.hasta != null)
+                {
+                    <p>Hasta: @Html.Raw(ViewBag.hasta)</p>
+                }
+            }
+            <div style="width: 400px; height: 400px">
+                <canvas id="myChart" width="400" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/Chart.min.js"></script>
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Terminada', 'Pausada', 'En Proceso'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [@Html.Raw(ViewBag.Terminada), @Html.Raw(ViewBag.Pausada), @Html.Raw(ViewBag.EnProceso)],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)', //red
+                        'rgba(255, 206, 86, 0.2)', //yellow
+                        'rgba(75, 192, 192, 0.2)' //green
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/css/Chart.min.css" />
+}
+
+@section itemsDelMenu {
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Dashboard">Volver al Dashboard</a>
+    </li>
+}
